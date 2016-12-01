@@ -1,3 +1,4 @@
+{webFrame} = require('electron')
 
 {throttle, topof} = require '../util'
 
@@ -98,7 +99,15 @@ resize = do ->
 resizers =
     leftResize: (ev) -> action 'leftresize', (Math.max 90, ev.clientX)
 
+
+#spell = require 'spellchecker'
+webFrame.setSpellCheckProvider 'en-US', true, {
+    spellCheck: (text) ->
+        return false#!(spell.isMisspelled(text))
+}
+
 module.exports = exp = layout ->
+    #
     platform = if process.platform is 'darwin' then 'osx' else ''
     div class:'applayout ' + platform, resize, ->
         div class: 'connecting',  ->
