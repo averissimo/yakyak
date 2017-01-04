@@ -29,8 +29,7 @@ deploy:
   provider: releases
   prerelease: true
   skip_cleanup: true
-  api_key:
-    secure: "${API_KEY}"
+  api_key: "${API_KEY}"
   file:
     - "dist/yakyak-${YAKYAK_VERSION}-linux-x64.tar.gz"
     - "dist/yakyak-${YAKYAK_VERSION}-linux-ia32.tar.gz"
