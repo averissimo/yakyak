@@ -11,7 +11,7 @@ before_deploy:
   - sudo dpkg --add-architecture i386
   - sudo apt-get install -y wine32
   - wine wineboot --init
-  - npm run deploy"
+  - npm run deploy
 
 deploy:
   provider: releases
