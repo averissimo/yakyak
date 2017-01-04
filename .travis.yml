@@ -8,7 +8,6 @@ before_deploy:
   - export YAKYAK_VERSION=`node -e "console.log(require('./package.json').version);"`
   - sudo apt-get -qq update
   - sudo apt-get install -y wine zip xvfb
-  - sudo apt-get install -y wine32
   - wine wineboot --init
   - npm run deploy
 
