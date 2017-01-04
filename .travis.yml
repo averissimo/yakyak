@@ -5,11 +5,12 @@ notifications:
   email: false
 
 before_deploy:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y wine zip xvfb
-  - sudo dpkg --add-architecture i386
-  - sudo apt-get install -y wine32
-  - wine wineboot --init
+  - "export YAKYAK_VERSION=`node -e "console.log(require('./package.json').version);"`"
+  - "sudo apt-get -qq update"
+  - "sudo apt-get install -y wine zip xvfb"
+  - "sudo dpkg --add-architecture i386"
+  - "sudo apt-get install -y wine32"
+  - "wine wineboot --init"
   - "npm run deploy"
 
 deploy:
@@ -18,11 +19,11 @@ deploy:
   api_key:
     secure: f+BytzySzrN6SdMcKcLXZgAgON806zhydNhhyAbvBw4G5P7M+aU0APw4ufCBGnuIyZllvEaIRD6E98ku6JI1Yj1suN++Pv4RIy/Fun5frsclA7DotzLwPSkNHC5/u/MlAPAirn9kfpcm7B2efynl61DaE+veAEsoOfO9RQGQcjuV1w9MBwTuEhcVdAXE9SjDlsqlN3CZz8VPxtS+69GYluijLVgrdroQecC2QvIwadmOE6LKl7xnHxxrtBjsTQ9xJo0rLemv76u2flhusKOBHlz9iw+mbxrdtj9YdlIOSsaxSSAUF7FYR+xsh4lfva+/8YypAQ5uwQZ4g+Ykq9dzMSmrJmC5V7ID3N5srSJmxCHOuRjDP5YT3HcicdhDOAdREswM/eKOBhQPWoj7ZJyzvPTSZf87qO2ZfG0VUWMNIMUjXhBsbzkt7tYpHVt1SF/XOFM7+QizbJSFucsY1Wx4lVtWhB2SyVm7Ix94HCc8B1HKVItevkHXvZpV7EGwDa4r84NcusTpesKuft4GGUSk6nbHnxvSqhtGCYAHCR8PA9ZDE2LsA/IRIooXnkaZyxphnuq7LoqUTnO7pkZ2zB0jTEg+32Xrxl7HwSVv03zJ46dTEEaD2BqmBH+lB6NmpsHmcFp9KZmvDCgv+TAaIIf4GxS8OnF0iqsuc8qoewobFK4=
   file:
-    - "dist/yakyak-*-linux-x64.tar.gz"
-    - "dist/yakyak-*-linux-ia32.tar.gz"
-    - "dist/yakyak-*-win32-ia32.zip"
-    - "dist/yakyak-*-win32-x64.zip"
-    - "dist/yakyak-*-osx.zip"
+    - "dist/yakyak-${YAKYAK_VERSION}-linux-x64.tar.gz"
+    - "dist/yakyak-${YAKYAK_VERSION}-linux-ia32.tar.gz"
+    - "dist/yakyak-${YAKYAK_VERSION}-win32-ia32.zip"
+    - "dist/yakyak-${YAKYAK_VERSION}-win32-x64.zip"
+    - "dist/yakyak-${YAKYAK_VERSION}-osx.zip"
   on:
     repo: averissimo/yakyak
     branch: personal
