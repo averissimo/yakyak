@@ -30,4 +30,4 @@ deploy:
     - "dist/yakyak-${YAKYAK_VERSION}-osx.zip"
   on:
     repo: averissimo/yakyak
-    branch: personal
+    tags: true
