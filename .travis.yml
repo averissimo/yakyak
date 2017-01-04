@@ -5,13 +5,13 @@ notifications:
   email: false
 
 before_deploy:
-  - "export YAKYAK_VERSION=`node -e "console.log(require('./package.json').version);"`"
-  - "sudo apt-get -qq update"
-  - "sudo apt-get install -y wine zip xvfb"
-  - "sudo dpkg --add-architecture i386"
-  - "sudo apt-get install -y wine32"
-  - "wine wineboot --init"
-  - "npm run deploy"
+  - export YAKYAK_VERSION=`node -e "console.log(require('./package.json').version);"`
+  - sudo apt-get -qq update
+  - sudo apt-get install -y wine zip xvfb
+  - sudo dpkg --add-architecture i386
+  - sudo apt-get install -y wine32
+  - wine wineboot --init
+  - npm run deploy"
 
 deploy:
   provider: releases
