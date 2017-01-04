@@ -10,10 +10,9 @@ sudo: required
 before_deploy:
   - export YAKYAK_VERSION=`node -e "console.log(require('./package.json').version);"`
   - export DEBUG=electron-packager
+  - sudo dpkg --add-architecture i386
   - sudo apt-get -qq update
-  - sudo apt-get install -y wine zip xvfb
-  - sudo dpkg --add-architecture i386 && apt-get update
-  - sudo apt-get install -y wine32
+  - sudo apt-get install -y wine1.6-i386 zip xvfb
   - WINEARCH=win32 wine wineboot --init
   - xvfb-run npm run deploy
 
