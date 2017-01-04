@@ -9,7 +9,7 @@ before_deploy:
   - sudo apt-get -qq update
   - sudo apt-get install -y wine zip xvfb
   - wine wineboot --init
-  - npm run deploy
+  - xvfb-run npm run deploy
 
 deploy:
   provider: releases
