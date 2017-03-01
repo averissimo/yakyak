@@ -143,10 +143,12 @@ gulp.task 'icons', ->
         # Unread icon in tray (linux/windows)
         'icon-unread_016.png': 'icon-unread.png'
         'icon-unread_032.png': 'icon-unread@2x.png'
+        'icon-unread_064.png': 'icon-unread@4x.png'
         'icon-unread_128.png': 'icon-unread@8x.png'
         # Read icon in tray (linux/windows)
         'icon-read_016.png': 'icon-read.png'
         'icon-read_032.png': 'icon-read@2x.png'
+        'icon-read_064.png': 'icon-read@4x.png'
         'icon-read_128.png': 'icon-read@8x.png'
         # Unread icon in tray (Mac OS X)
         'osx-icon-unread-Template_016.png': 'osx-icon-unread-Template.png'
