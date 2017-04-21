@@ -70,6 +70,7 @@ handle 'setpresence', (r) ->
     if not r?.presence?.available?
         console.log "setpresence: User '#{nameof entity[r?.user_id?.chat_id]}' does not show his/hers/it status", r
     else
+        console.log "setpresence: User '#{nameof entity[r?.user_id?.chat_id]}' shows his/hers/it status", r
         entity.setPresence r.user_id.chat_id, r?.presence?.available
 
 handle 'update:unreadcount', ->
