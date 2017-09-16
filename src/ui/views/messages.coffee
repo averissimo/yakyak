@@ -275,10 +275,10 @@ drawMessage = (e, entity) ->
                 pass ' Call ended'
         else if e.otr_modification
             if e.otr_modification.new_otr_status is "OFF_THE_RECORD"
-                pass i18n.__ 'conversation.history_off:History has been turned off.'
+                pass i18n.__ 'conversation.history_on:History has been turned off.'
             else if e.otr_modification.new_otr_status is "ON_THE_RECORD"
                 pass i18n.__ 'conversation.history_on:History has been turned on.'
-            else 
+            else
                 console.log 'unhandled event type', e, entity
         else
             console.log 'unhandled event type', e, entity
@@ -444,15 +444,15 @@ formatAttachment = (att) ->
     else
         console.warn 'ignoring attachment', att unless att?.length == 0
         return
-    
+
     # stickers do not have an href so we link to the original content instead
     href = original_content_url unless href
-    
+
     # here we assume attachments are only images
     if preload thumb
         div class:'attach', ->
             a {href, onclick}, -> img src:thumb
-    
+
 
 handle 'loadedimg', ->
     # allow controller to record current position
