@@ -32,6 +32,10 @@ buildChatMessage = (sender, txt) ->
     delivery_medium = ClientDeliveryMediumType[conversation_state?.delivery_medium_option[0]?.delivery_medium?.delivery_medium_type]
     if not delivery_medium
       delivery_medium = ClientDeliveryMediumType.BABEL
+    otr_status = OffTheRecordStatus[conv[conv_id]?.otr_status]
+    if not otr_status?
+        otr_status = OffTheRecordStatus.ON_THE_RECORD
+    console.log('otr', otr_status)
     action = null
     otr_status = OffTheRecordStatus[conv[conv_id]?.otr_status]
     if not otr_status?
