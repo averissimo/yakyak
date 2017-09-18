@@ -1,0 +1,36 @@
+# Test against the latest version of this Node.js version
+environment:
+  nodejs_version: "6"
+
+# Install scripts. (runs after repo cloning)
+install:
+  # Get the latest stable version of Node.js or io.js
+  - ps: Install-Product node $env:nodejs_version
+  # install modules
+  - YAKYAK_VERSION=`node -e "console.log(require('./package.json').version);"`
+  - npm install
+  - npm run deploy:win32
+
+# Post-install test scripts.
+test_script:
+  # Output useful info for debugging.
+  - node --version
+  - npm --version
+  # run tests
+  - npm test
+
+# Don't actually build.
+build: off
+
+deploy:
+  release: $(YAKYAK_VERSION)
+  description: ''
+  provider: GitHub
+  auth_token:
+    secure: $(API_KEY) # your encrypted token from GitHub
+  artifact: /dist\/.*\win32.*\.zip/
+  draft: false
+  prerelease: true
+  on:
+    branch: master                 # release from master branch only
+    appveyor_repo_tag: true        # deploy on tag push only
