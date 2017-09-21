@@ -163,6 +163,19 @@ app.on 'ready', ->
         console.log "Error on main process:\n#{msg}\n" +
             "--- End of error message. More details:\n", msg
 
+        # detect if problem with cookies.json
+        if (msg.errno == '-4094') {
+          console.log "Logging out as safety measure, but first some information on the file that caused the error:"
+          fs.stat(msg.path, (err, stat) => {
+            if (err) {
+              console.log('  Error from stat:', err)
+            }
+            if (stat) {
+              console.log('  Stat:', stat)
+            }
+          })
+          logout
+        }
     #
     #
     # Handle crashes on the main window and show in console
