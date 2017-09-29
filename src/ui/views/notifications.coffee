@@ -34,6 +34,7 @@ module.exports = (models) ->
         sender = nameof entity[cid]
         text = null
 
+        console.log 'New message that should create a notification', msg
         if msg.chat_message?
             return unless msg.chat_message?.message_content?
             text = textMessage msg.chat_message.message_content, proxied, viewstate.showMessageInNotification
@@ -64,6 +65,13 @@ module.exports = (models) ->
         else
             return
 
+        if !text
+            console.log 'no text was infered!'
+        else if quietIf(c, chat_id)
+            console.log 'window has focus so no notification'
+        else
+            console.log 'Text to be used', text
+
         # maybe trigger OS notification
         return if !text or quietIf(c, chat_id)
 
@@ -77,6 +85,7 @@ module.exports = (models) ->
             else
                 contentImage = undefined
             #
+            console.log 'Calling notifier with text', text
             notifier.notify
                 title: if viewstate.showUsernameInNotification
                            if !isNotificationCenter && !viewstate.showIconNotification
