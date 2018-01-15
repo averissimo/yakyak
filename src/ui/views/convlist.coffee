@@ -14,7 +14,10 @@ module.exports = view (models) ->
             moment.locale(window.navigator.language)
         convs = conv.list()
         renderConv = (c) ->
-            console.log 'ARCHIVED?', c.current_participant, c?.self_conversation_state?.view[0]
+            convNames = c.participant_data.map (arg) ->
+              arg.fallback_name
+            .join()
+            console.log 'status of conv:', c?.self_conversation_state?.view[0], convNames
             return if c?.self_conversation_state.view[0] == 'ARCHIVED_VIEW'
             # remove emoji suggestions on renderConv
             if document.querySelectorAll('.emoji-sugg-container').length
