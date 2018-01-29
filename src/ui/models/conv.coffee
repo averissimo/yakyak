@@ -339,6 +339,8 @@ funcs =
         return unless c = lookup[conv_id]
 
         c.read_state = state.conversation?.read_state ? c.read_state
+        c.otr_status = state.conversation?.otr_status ? c.otr_status
+
 
         @redraw_conversation() if redraw
 
@@ -352,6 +354,13 @@ funcs =
         # as when we injected DOM.
         updated 'afterHistory'
 
+    mergeEvents: (event, c) ->
+        newEvents = {}
+        for e in (event ? []).concat (c.event ? [])
+            newEvents[e.event_id] = e
+        return Object.values(newEvents).sort (a,b) ->
+            a.advances_sort_timestamp - b.advances_sort_timestamp
+
     updateHistory: (state) ->
         conv_id = state?.conversation_id?.id
         return unless c = lookup[conv_id]
@@ -360,7 +369,9 @@ funcs =
 
         @updateMetadata(state, false)
 
-        c.event = (event ? []).concat (c.event ? [])
+        console.log 'merging history'
+        c.event = @mergeEvents(event, c)
+        #c.event = (event ? []).concat (c.event ? [])
         c.nomorehistory = true if event?.length == 0
 
         @redraw_conversation()

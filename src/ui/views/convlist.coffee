@@ -101,7 +101,7 @@ module.exports = view (models) ->
             if starred.length > 0
                 div class: 'label', i18n.__ 'recent:Recent'
             others.forEach renderConv
-        console.log('Conversation_list:', debug_convs) if window.debug_flag
+        # console.log('Conversation_list:', debug_convs) if window.debug_flag
 
 # possible classes of messages
 MESSAGE_CLASSES = ['placeholder', 'chat_message',

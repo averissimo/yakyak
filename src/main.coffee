@@ -344,6 +344,8 @@ app.on 'ready', ->
 
     ipc.on 'modifyotrstatus', seqreq (ev, conv_id, otr) ->
         client.modifyotrstatus conv_id, otr, false, (ev, conv_id, otr) -> conv_id
+        .then (r) ->
+            ipcsend 'handlemodifyotrstatus', r
 
     # retry
     ipc.on 'deleteconversation', seqreq (ev, conv_id) ->
@@ -442,6 +444,7 @@ app.on 'ready', ->
     # propagate these events to the renderer
     require('./ui/events').forEach (n) ->
         client.on n, (e) ->
+            console.log 'New event:', n, e
             ipcsend n, e
 
     # Emitted when the window is about to close.

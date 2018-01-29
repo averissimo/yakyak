@@ -101,8 +101,8 @@ handle 'attop', (attop) ->
     viewstate.updateAtTop attop
     conv.updateAtTop attop
 
-handle 'history', (conv_id, timestamp) ->
-    ipc.send 'getconversation', conv_id, timestamp, 20
+handle 'history', (conv_id, timestamp, size = 20) ->
+    ipc.send 'getconversation', conv_id, timestamp, size
 
 handle 'handleconversationmetadata', (r) ->
     return unless r.conversation_state
@@ -111,6 +111,7 @@ handle 'handleconversationmetadata', (r) ->
     conv.updateMetadata r.conversation_state
 
 handle 'handlehistory', (r) ->
+    console.log('handle history:', r.conversation_state)
     return unless r.conversation_state
     conv.updateHistory r.conversation_state
 
@@ -372,8 +373,14 @@ handle 'toggleotr', ->
     conv_id = viewstate.selectedConv
     return unless c = conv[conv_id]
     q = conv.isOnTheRecord(c)
+    console.log('is on the record?', q)
     ipc.send 'modifyotrstatus', conv_id, (if q then OFF_THE_RECORD else ON_THE_RECORD)
     conv.toggleOtr(c)
+
+handle 'handlemodifyotrstatus', (r) ->
+    later ->
+        console.log 'Handling modifyotrstatus', r
+        #action 'history', conv_id, Date.now() * 1000, 1
 
 handle 'togglestar', ->
     conv_id = viewstate.selectedConv
@@ -450,7 +457,11 @@ handle 'client_conversation', (c) ->
     # Conversation must be added, even if already exists
     #  why? because when a new chat message for a new conversation appears
     #  a skeleton is made of a conversation
-    conv.add c unless conv[c?.conversation_id?.id]?.participant_data?
+    unless conv[c?.conversation_id?.id]?.participant_data?
+      conv.add c
+    else
+      later ->
+        action 'history', c.conversation_id.id, c._header.current_server_time, 1
 
 handle 'hangout_event', (e) ->
     return unless e?.hangout_event?.event_type in ['START_HANGOUT', 'END_HANGOUT']
