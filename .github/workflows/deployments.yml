@@ -9,10 +9,12 @@ jobs:
   build-yakyak:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
+    - name: checkout code
+      uses: actions/checkout@v2
+    - name: setup node
+      uses: actions/setup-node@v1
       with:
-        node-version: '12'
+        node-version: '14'
     - run: npm install -g coffee-script
     - run: npm ci
     - run: |
@@ -48,23 +50,24 @@ jobs:
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
+    #
     - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: rolling-test #${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: true
-          files: |
-              dist/*.tar
-              dist/*.deb
-              dist/*.tag.gz
-              dist/*.rpm
-              dist/*.zip
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: rolling-test #${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          Changes in this Release
+          - First Change
+          - Second Change
+        draft: false
+        prerelease: true
+        files: |
+            dist/*.tar
+            dist/*.deb
+            dist/*.tag.gz
+            dist/*.rpm
+            dist/*.zip
