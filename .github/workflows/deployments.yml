@@ -3,7 +3,7 @@ name: Build yakyak binaries
 on: push
 
 jobs:
-  build_binaries:
+  build-yakyak:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -13,36 +13,35 @@ jobs:
     - run: npm install -g coffee-script
     - run: npm ci
     - run: |
+        # environment variables
         export NPM_DEBUG_LEVEL=silent
         export YAKYAK_VERSION=`node -e "console.log(require('./package.json').version);"`
         # debug information for the electron packager
         export DEBUG=electron-packager
-        echo $DEBUG
-        echo $YAKYAK_VERSION
-
+    - run: |
+        # install wine 32-bit architecture
         sudo dpkg --add-architecture i386
         sudo apt-get -qq update
         sudo rm /var/lib/dpkg/lock
         sudo apt-get install -y -qq wine-stable zip xvfb fakeroot
         wine wineboot --init # WINEARCH=win32
-        #
-        # actuall building of the binaries
-        npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-x64
-        npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-arm64
-        npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-ia32
-        npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-x64
-        npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
-        xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
-        #
-        # RPM and DEB binaries
+    - run:
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-x64
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-arm64
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-ia32
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-x64
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
+    - run: xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
+    - run: |
+        # build RPM, DEB and Pacman binaries
         # install fpm
         gem install --no-document fpm
         # needed to deploy on rpm / pacman
         sudo apt-get install -y -qq rpm libarchive-tools
         #
-        npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
-        npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
-        npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
-        npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
-        npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
-        npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep

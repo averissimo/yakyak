@@ -3,7 +3,7 @@ name: Testing yakyak
 on: push
 
 jobs:
-  test_node:
+  test-yakyak:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
