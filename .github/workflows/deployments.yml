@@ -1,6 +1,9 @@
 name: Build yakyak binaries
 
-on: push
+on:
+  push:
+    branches:
+      - "master"
 
 jobs:
   build-yakyak:
@@ -33,15 +36,29 @@ jobs:
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
     - run: xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
     - run: |
-        # build RPM, DEB and Pacman binaries
+        # dependencies for RPM, DEB and Pacman binaries
         # install fpm
-        gem install --no-document fpm
+        sudo gem install --no-document fpm
         # needed to deploy on rpm / pacman
         sudo apt-get install -y -qq rpm libarchive-tools
-        #
+    # build rpm, deb and pacman
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: rolling-test #${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          Changes in this Release
+          - First Change
+          - Second Change
+        draft: false
+        prerelease: true
