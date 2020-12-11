@@ -62,3 +62,9 @@ jobs:
           - Second Change
         draft: false
         prerelease: true
+        files: |
+            dist/*.tar
+            dist/*.deb
+            dist/*.tag.gz
+            dist/*.rpm
+            dist/*.zip
