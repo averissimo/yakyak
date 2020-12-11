@@ -49,22 +49,22 @@ jobs:
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      with:
-        tag_name: rolling-test #${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: |
-          Changes in this Release
-          - First Change
-          - Second Change
-        draft: false
-        prerelease: true
-        files: |
-            dist/*.tar
-            dist/*.deb
-            dist/*.tag.gz
-            dist/*.rpm
-            dist/*.zip
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: rolling-test #${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: true
+          files: |
+              dist/*.tar
+              dist/*.deb
+              dist/*.tag.gz
+              dist/*.rpm
+              dist/*.zip
