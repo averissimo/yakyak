@@ -28,7 +28,6 @@ jobs:
         sudo rm /var/lib/dpkg/lock
         sudo apt-get install -y -qq wine-stable zip xvfb fakeroot
         wine wineboot --init # WINEARCH=win32
-    - run:
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-x64
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-arm64
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-ia32
@@ -49,9 +48,9 @@ jobs:
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
     #
-    - uses: actions/create-release@v1
-      name: Create Release
+    - name: Create Release
       id: create_release
+      uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
