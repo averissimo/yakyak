@@ -9,12 +9,10 @@ jobs:
   build-yakyak:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout code
-      uses: actions/checkout@v2
-    - name: setup node
-      uses: actions/setup-node@v1
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
       with:
-        node-version: '14'
+        node-version: '12'
     - run: npm install -g coffee-script
     - run: npm ci
     - run: |
@@ -51,9 +49,9 @@ jobs:
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
     #
-    - name: Create Release
+    - uses: actions/create-release@v1
+      name: Create Release
       id: create_release
-      uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
