@@ -27,7 +27,7 @@ jobs:
       env:
         YAKYAK_TMP: ${{ steps.env-variables.env.YAKYAK_VERSION }}
         MY_TEST: my-test
-        MY_YAKYAK: ${node -e "console.log(require('./package.json').version);"}
+        MY_YAKYAK: $(node -e "console.log(require('./package.json').version);")
       run: echo $YAKYAK_TMP -- $YAKYAK_VERSION -- $MY_TEST -- $MY_YAKYAK
     - run: |
         # install wine 32-bit architecture
