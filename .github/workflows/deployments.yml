@@ -16,11 +16,11 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '12'
-    - run: npm install -g coffee-script
-    - run: npm ci
+    # - run: npm install -g coffee-script
+    # - run: npm ci
     - name: env_variables
       id: env-variables
-      run: echo "::set-output name=version::$(node -e 'console.log(require(\'./package.json').version);\')"|
+      run: echo "::set-output name=version::$(node -e "console.log(require('./package.json').version);")"
     - name: test_env
       env:
         YAKYAK_TMP: ${{ steps.env-variables.env.YAKYAK_VERSION }}
