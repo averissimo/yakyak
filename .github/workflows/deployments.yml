@@ -53,7 +53,7 @@ jobs:
       with:
         prerelease: true
         files: |
-          "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-amd64.deb"
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-amd64.deb
       #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-arm64.tar.gz"
       #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-i386.deb"
       #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32-pacman.tar.gz"
