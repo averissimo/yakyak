@@ -64,7 +64,6 @@ jobs:
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32.rpm"
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32-pacman.tar.gz"
           "dist/yakyak-${YAKYAK_VERSION}-win32-ia32.zip"
-
       #
       #    - "dist/com.github.yakyak.YakYak_master_x64.flatpak"
       # #    - "dist/com.github.yakyak.YakYak_master_ia32.flatpak"
