@@ -33,13 +33,8 @@ jobs:
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-x64
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
     - run: xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
-    - run: |
-        # dependencies for RPM, DEB and Pacman binaries
-        # install fpm
-        sudo gem install --no-document fpm
-        # needed to deploy on rpm / pacman
-        sudo apt-get install -y -qq rpm libarchive-tools
-     build rpm, deb and pacman
+    - name: build rpm, deb and pacman
+      run: sudo gem install --no-document fpm && sudo apt-get install -y -qq rpm libarchive-tools
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
