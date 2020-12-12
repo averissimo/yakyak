@@ -54,8 +54,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        allow_duplicate: true
-        tag_name: rolling-test #${{ github.ref }}
+        tag_name: rolling-test2 #${{ github.ref }}
         release_name: Release ${{ github.ref }}
         body: |
           Changes in this Release
