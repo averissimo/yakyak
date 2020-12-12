@@ -26,7 +26,8 @@ jobs:
     - name: test_env
       env:
         YAKYAK_TMP: ${{ steps.env_variables.env.YAKYAK_VERSION }}
-      run: echo ${YAKYAK_TMP} -- ${YAKYAK_VERSION}
+        MY_TEST: my-test
+      run: echo $YAKYAK_TMP -- $YAKYAK_VERSION -- $MY_TEST
     - run: |
         # install wine 32-bit architecture
         sudo dpkg --add-architecture i386
