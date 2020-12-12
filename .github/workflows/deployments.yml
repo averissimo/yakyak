@@ -15,12 +15,18 @@ jobs:
         node-version: '12'
     - run: npm install -g coffee-script
     - run: npm ci
-    - run: |
+    - name: env_variables
+      id: env-variables
+      run: |
         # environment variables
         export NPM_DEBUG_LEVEL=silent
         export YAKYAK_VERSION=`node -e "console.log(require('./package.json').version);"`
         # debug information for the electron packager
         export DEBUG=electron-packager
+    - name: test_env
+      env:
+        YAKYAK_TMP: ${{ steps.env_variables.env.YAKYAK_VERSION }}
+      run: echo ${YAKYAK_TMP} -- ${YAKYAK_VERSION}
     - run: |
         # install wine 32-bit architecture
         sudo dpkg --add-architecture i386
@@ -70,6 +76,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: ./dist/yakyak-${{ env.YAKYAK_VERSION }}-win32-x64.zip
+        asset_path: ./dist/yakyak-${{ steps.env_variables.env.YAKYAK_VERSION }}-win32-x64.zip
         asset_name: yakyak-${{ env.YAKYAK_VERSION }}-win32-x64.zip
         asset_content_type: application/zip
