@@ -50,23 +50,23 @@ jobs:
         files: |
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-osx-x64.zip"
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-osx-arm64.zip"
-      #
+          #
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64.tar.gz"
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64.rpm"
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-amd64.deb"
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64-pacman.tar.gz"
-      #
+          #
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-win32-x64.zip"
-      #
+          #
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32.tar.gz"
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-i386.deb"
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32.rpm"
           - "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32-pacman.tar.gz"
-      #
+          #
           - "dist/yakyak-${YAKYAK_VERSION}-win32-ia32.zip"
-      #
-      #    - "dist/com.github.yakyak.YakYak_master_x64.flatpak"
-      # #    - "dist/com.github.yakyak.YakYak_master_ia32.flatpak"
+          #
+          #    - "dist/com.github.yakyak.YakYak_master_x64.flatpak"
+          # #    - "dist/com.github.yakyak.YakYak_master_ia32.flatpak"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # - name: Create Release
