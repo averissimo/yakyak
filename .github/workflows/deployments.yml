@@ -7,6 +7,9 @@ on:
 
 jobs:
   build-yakyak:
+    env:
+      NPM_DEBUG_LEVEL: silent
+      DEBUG: electron-packager
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -17,67 +20,62 @@ jobs:
     - run: npm ci
     - name: env_variables
       id: env-variables
-      run: |
-        # environment variables
-        export NPM_DEBUG_LEVEL=silent
-        export YAKYAK_VERSION=`node -e "console.log(require('./package.json').version);"`
-        # debug information for the electron packager
-        export DEBUG=electron-packager
+      run: echo "::set-output name=version::$(node -e 'console.log(require(\'./package.json').version);\')"|
     - name: test_env
       env:
         YAKYAK_TMP: ${{ steps.env-variables.env.YAKYAK_VERSION }}
-        MY_TEST: my-test
+        MY_TEST: ${{ steps.env-variables.outputs.version }}
         MY_YAKYAK: $(node -e "console.log(require('./package.json').version);")
-      run: echo $YAKYAK_TMP -- $YAKYAK_VERSION -- $MY_TEST -- $MY_YAKYAK
-    - run: |
-        # install wine 32-bit architecture
-        sudo dpkg --add-architecture i386
-        sudo apt-get -qq update
-        sudo rm /var/lib/dpkg/lock
-        sudo apt-get install -y -qq wine-stable zip xvfb fakeroot
-        wine wineboot --init # WINEARCH=win32
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-x64
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-arm64
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-ia32
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-x64
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
-    - run: xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
-    #- run: |
-    #    # dependencies for RPM, DEB and Pacman binaries
-    #    # install fpm
-    #    sudo gem install --no-document fpm
-    #    # needed to deploy on rpm / pacman
-    #    sudo apt-get install -y -qq rpm libarchive-tools
-    # build rpm, deb and pacman
-    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
-    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
-    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
-    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
-    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
-    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
-    #
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      with:
-        tag_name: rolling-test2 #${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: |
-          Changes in this Release
-          - First Change
-          - Second Change
-        draft: false
-        prerelease: true
-    #
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: ./dist/yakyak-${{ steps.env_variables.env.YAKYAK_VERSION }}-win32-x64.zip
-        asset_name: yakyak-${{ env.YAKYAK_VERSION }}-win32-x64.zip
-        asset_content_type: application/zip
+      run: echo $YAKYAK_TMP -- $YAKYAK_VERSION -- $MY_TEST -- $MY_YAKYAK -- $NPM_DEBUG_LEVEL
+    # - run: |
+    #     # install wine 32-bit architecture
+    #     sudo dpkg --add-architecture i386
+    #     sudo apt-get -qq update
+    #     sudo rm /var/lib/dpkg/lock
+    #     sudo apt-get install -y -qq wine-stable zip xvfb fakeroot
+    #     wine wineboot --init # WINEARCH=win32
+    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-x64
+    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-arm64
+    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-ia32
+    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-x64
+    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
+    # - run: xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
+    # #- run: |
+    # #    # dependencies for RPM, DEB and Pacman binaries
+    # #    # install fpm
+    # #    sudo gem install --no-document fpm
+    # #    # needed to deploy on rpm / pacman
+    # #    sudo apt-get install -y -qq rpm libarchive-tools
+    # # build rpm, deb and pacman
+    # #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
+    # #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
+    # #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
+    # #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
+    # #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
+    # #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
+    # #
+    # - name: Create Release
+    #   id: create_release
+    #   uses: actions/create-release@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    #   with:
+    #     tag_name: rolling-test2 #${{ github.ref }}
+    #     release_name: Release ${{ github.ref }}
+    #     body: |
+    #       Changes in this Release
+    #       - First Change
+    #       - Second Change
+    #     draft: false
+    #     prerelease: true
+    # #
+    # - name: Upload Release Asset
+    #   id: upload-release-asset
+    #   uses: actions/upload-release-asset@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+    #     asset_path: ./dist/yakyak-${{ steps.env_variables.env.YAKYAK_VERSION }}-win32-x64.zip
+    #     asset_name: yakyak-${{ env.YAKYAK_VERSION }}-win32-x64.zip
+    #     asset_content_type: application/zip
