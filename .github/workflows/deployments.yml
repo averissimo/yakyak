@@ -25,9 +25,11 @@ jobs:
         export DEBUG=electron-packager
     - name: test_env
       env:
-        YAKYAK_TMP: ${{ steps.env_variables.env.YAKYAK_VERSION }}
+        YAKYAK_TMP: ${{ steps.env-variables.env.YAKYAK_VERSION }}
         MY_TEST: my-test
-      run: echo $YAKYAK_TMP -- $YAKYAK_VERSION -- $MY_TEST
+        MY_YAKYAK: `node -e "console.log(require('./package.json').version);"`
+        MY_YAKYAK2: ${{ node -e "console.log(require('./package.json').version);" }}
+      run: echo $YAKYAK_TMP -- $YAKYAK_VERSION -- $MY_TEST -- $MY_YAKYAK
     - run: |
         # install wine 32-bit architecture
         sudo dpkg --add-architecture i386
