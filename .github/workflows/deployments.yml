@@ -40,7 +40,7 @@ jobs:
     - name: build rpm, deb and pacman
       run: sudo gem install --no-document fpm && sudo apt-get install -y -qq rpm libarchive-tools
     # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
-     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
     # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
     # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
     # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
