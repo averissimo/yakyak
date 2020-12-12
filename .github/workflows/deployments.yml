@@ -34,19 +34,19 @@ jobs:
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-x64
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
     - run: xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
-    - run: |
-        # dependencies for RPM, DEB and Pacman binaries
-        # install fpm
-        sudo gem install --no-document fpm
-        # needed to deploy on rpm / pacman
-        sudo apt-get install -y -qq rpm libarchive-tools
+    #- run: |
+    #    # dependencies for RPM, DEB and Pacman binaries
+    #    # install fpm
+    #    sudo gem install --no-document fpm
+    #    # needed to deploy on rpm / pacman
+    #    sudo apt-get install -y -qq rpm libarchive-tools
     # build rpm, deb and pacman
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
+    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
+    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
+    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
+    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
+    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
+    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
     #
     - name: Create Release
       id: create_release
@@ -62,9 +62,14 @@ jobs:
           - Second Change
         draft: false
         prerelease: true
-        files: |
-            dist/*.tar
-            dist/*.deb
-            dist/*.tag.gz
-            dist/*.rpm
-            dist/*.zip
+    #
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ./dist/yakyak-${{YAKYAK_VERSION}}-win32-x64.zip
+        asset_name: yakyak-${{YAKYAK_VERSION}}-win32-x64.zip
+        asset_content_type: application/zip
