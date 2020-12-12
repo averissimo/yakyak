@@ -46,6 +46,7 @@ jobs:
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
     #
+    - run: ls && echo "123" && ls dist
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
@@ -55,6 +56,7 @@ jobs:
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-osx-x64.zip"
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-osx-arm64.zip"
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64.tar.gz"
+          "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-arm64.tar.gz"
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64.rpm"
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-amd64.deb"
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64-pacman.tar.gz"
@@ -63,7 +65,7 @@ jobs:
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-i386.deb"
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32.rpm"
           "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32-pacman.tar.gz"
-          "dist/yakyak-${YAKYAK_VERSION}-win32-ia32.zip"
+          "dist/yakyak-${{ steps.env-variables.outputs.version }}-win32-ia32.zip"
       #
       #    - "dist/com.github.yakyak.YakYak_master_x64.flatpak"
       # #    - "dist/com.github.yakyak.YakYak_master_ia32.flatpak"
