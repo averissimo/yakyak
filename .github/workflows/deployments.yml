@@ -19,35 +19,49 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '12'
-    - run: npm install -g coffee-script
-    - run: npm ci
-    - name: env_variables
+    - name: Install coffeescript to build *.coffee sources
+      run: npm install -g coffee-script
+    - name: Install packages
+      run: npm ci
+    - name: Setup environment variables
       id: env-variables
       run: echo "::set-output name=version::$(node -e "console.log(require('./package.json').version);")"
-    - run: |
-        # install wine 32-bit architecture
+    - name: install wine 32-bit architecture
+      run: |
         sudo dpkg --add-architecture i386
         sudo apt-get -qq update
         sudo rm /var/lib/dpkg/lock
         sudo apt-get install -y -qq wine-stable zip xvfb fakeroot
         wine wineboot --init # WINEARCH=win32
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-x64
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-arm64
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-ia32
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-x64
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
-    - run: xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
-    - name: build rpm, deb and pacman
+    - name: Linux build (64-bits)
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-x64
+    - name: Linux build (arm 64-bits)
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-arm64
+    - name: Linux build (32-bits)
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-ia32
+    - name: Mac OSX build (intel 64-bits)
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-x64
+    - name: Mac OSX build (arm 64-bits)
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
+    - name: Windows builds (32 and 64 bits)
+      run: xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
+    - name: Install rpm, deb and pacman dependencies
       run: sudo gem install --no-document fpm && sudo apt-get install -y -qq rpm libarchive-tools
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
-    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
+    - name: RPM build
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
+    - name: RPM build (32-bits)
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
+    - name: DEB build (64-bits)
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
+    - name: DEB build (32-bits)
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
+    - name: Pacman build (64-bits)
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
+    - name: Pacman build (32-bits)
+      run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
     #
-    - run: ls && echo "123" && ls dist
-    - uses: "marvinpinto/action-automatic-releases@10bdce6"
+    - name: Release and Upload assets
+      uses: "marvinpinto/action-automatic-releases@10bdce6"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: true
@@ -70,28 +84,3 @@ jobs:
       #
       #    - "dist/com.github.yakyak.YakYak_master_x64.flatpak"
       # #    - "dist/com.github.yakyak.YakYak_master_ia32.flatpak"
-    # - name: Create Release
-    #   id: create_release
-    #   uses: actions/create-release@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-    #   with:
-    #     tag_name: rolling-test3 #${{ github.ref }}
-    #     release_name: Release ${{ github.ref }}
-    #     body: |
-    #       Changes in this Release
-    #       - First Change
-    #       - Second Change
-    #     draft: false
-    #     prerelease: true
-    # #
-    # - name: Upload Release Asset
-    #   id: upload-release-asset
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-    #     asset_path: ./dist/yakyak-${{ steps.env-variables.outputs.version }}-win32-x64.zip
-    #     asset_name: yakyak-${{ steps.env-variables.outputs.version }}-win32-x64.zip
-    #     asset_content_type: application/zip
