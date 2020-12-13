@@ -32,19 +32,19 @@ jobs:
         sudo apt-get install -y -qq wine-stable zip xvfb fakeroot
         wine wineboot --init # WINEARCH=win32
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-x64
-    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-arm64
-    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-ia32
-    #- run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-x64
-    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
-    # - run: xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-arm64
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:linux-ia32
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-x64
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:darwin-arm64
+    - run: xvfb-run npm run -loglevel ${NPM_DEBUG_LEVEL} deploy:win32
     - name: build rpm, deb and pacman
       run: sudo gem install --no-document fpm && sudo apt-get install -y -qq rpm libarchive-tools
-    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:rpm:nodep
     - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:deb:nodep
-    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
-    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
-    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
-    # - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-x64:pacman:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:rpm:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:deb:nodep
+    - run: npm run -loglevel ${NPM_DEBUG_LEVEL} gulp deploy:linux-ia32:pacman:nodep
     #
     - run: ls && echo "123" && ls dist
     - name: Release
@@ -54,19 +54,19 @@ jobs:
         prerelease: true
         files: |
           dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-amd64.deb
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-arm64.tar.gz"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-i386.deb"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32-pacman.tar.gz"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32.rpm"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32.tar.gz"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64-pacman.tar.gz"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64.rpm"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64.tar.gz"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-osx-arm64.zip"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-osx-x64.zip"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-win32-arm64.zip"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-win32-ia32.zip"
-      #    "dist/yakyak-${{ steps.env-variables.outputs.version }}-win32-x64.zip"
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-arm64.tar.gz
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-i386.deb
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32-pacman.tar.gz
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32.rpm
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-ia32.tar.gz
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64-pacman.tar.gz
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64.rpm
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-x64.tar.gz
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-osx-arm64.zip
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-osx-x64.zip
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-win32-arm64.zip
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-win32-ia32.zip
+          dist/yakyak-${{ steps.env-variables.outputs.version }}-win32-x64.zip
       #
       #    - "dist/com.github.yakyak.YakYak_master_x64.flatpak"
       # #    - "dist/com.github.yakyak.YakYak_master_ia32.flatpak"
