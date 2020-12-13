@@ -51,6 +51,7 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: true
+        automatic_release_tag: ${{ github.ref }}
         files: |
           dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-amd64.deb
           dist/yakyak-${{ steps.env-variables.outputs.version }}-linux-arm64.tar.gz
