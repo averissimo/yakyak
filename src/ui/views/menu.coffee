@@ -199,13 +199,15 @@ templateView = (viewstate) ->
                     checked: viewstate.showPopUpNotifications
                     enabled: viewstate.loggedin
                     click: (it) -> action 'showpopupnotifications', it.checked
-                }, {
+                }
+                {
                     type: 'checkbox'
                     label: i18n.__('menu.view.notification.message:Show message in notifications')
                     checked: viewstate.showMessageInNotification
                     enabled: viewstate.loggedin && viewstate.showPopUpNotifications
                     click: (it) -> action 'showmessageinnotification', it.checked
-                }, {
+                }
+                {
                     type: 'checkbox'
                     label: i18n.__('menu.view.notification.username:Show username in notifications')
                     checked: viewstate.showUsernameInNotification
@@ -234,6 +236,13 @@ templateView = (viewstate) ->
                   enabled: viewstate.loggedin && viewstate.showPopUpNotifications && !viewstate.muteSoundNotification
                   click: (it) -> action 'forcecustomsound', it.checked
                 } if notifierSupportsSound
+                {
+                    type: 'checkbox'
+                    label: i18n.__('menu.view.notification.bouncyIcon:Bounce/flash icon on new messages')
+                    checked: viewstate.bouncyIcon
+                    enabled: viewstate.loggedin
+                    click: (it) -> action 'bouncyicon', it.checked
+                }
             ].filter (n) -> n != undefined
         }
         {

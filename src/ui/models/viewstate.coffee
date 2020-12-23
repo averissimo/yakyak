@@ -42,6 +42,7 @@ module.exports = exp = {
     closetotray: tryparse(localStorage.closetotray) or false
     showDockOnce: true
     showIconNotification: tryparse(localStorage.showIconNotification) ? true
+    bouncyIcon: tryparse(localStorage.bouncyIcon) ? true
     muteSoundNotification: tryparse(localStorage.muteSoundNotification) ? false
     forceCustomSound: tryparse(localStorage.forceCustomSound) ? false
     language: localStorage.language ? 'en'
@@ -254,6 +255,11 @@ module.exports = exp = {
     setForceCustomSound: (doshow) ->
         return if localStorage.forceCustomSound == doshow
         @forceCustomSound = localStorage.forceCustomSound = doshow
+        updated 'viewstate'
+
+    setBouncyIcon: (doshow) ->
+        return if localStorage.bouncyIcon == doshow
+        @bouncyIcon = localStorage.bouncyIcon = doshow
         updated 'viewstate'
 
     setShowIconNotification: (doshow) ->

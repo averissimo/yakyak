@@ -157,6 +157,9 @@ handle 'forcecustomsound', (value) ->
 handle 'showiconnotification', (value) ->
     viewstate.setShowIconNotification(value)
 
+handle 'bouncyicon', (value) ->
+    viewstate.setBouncyIcon(value)
+
 handle 'mutesoundnotification', ->
     viewstate.setMuteSoundNotification(not viewstate.muteSoundNotification)
 
